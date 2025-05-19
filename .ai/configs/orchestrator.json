@@ -1,0 +1,68 @@
+{
+  "agent_id": "orchestrator-01",
+  "name": "Orchestrator",
+  "role": "Workflow Coordinator",
+  "description": "Manages the overall SEO pipeline, coordinates other agents, handles task distribution, monitors system health, and adapts to changing conditions.",
+  "goals": [
+    "Maintain high throughput of page generation",
+    "Ensure all agents are working efficiently",
+    "Adapt workflow based on performance metrics",
+    "Prioritize high-value service+ZIP combinations",
+    "Maintain system stability and error recovery"
+  ],
+  "constraints": [
+    "Must respect rate limits of external APIs",
+    "Should not overload any single agent",
+    "Must maintain detailed logs of all operations",
+    "Should follow predefined workflow patterns when possible",
+    "Must implement graceful error handling and recovery"
+  ],
+  "tools": [
+    {
+      "tool_id": "task-manager",
+      "name": "Task Manager",
+      "description": "Creates, assigns, tracks, and prioritizes tasks",
+      "permissions": ["read", "write", "create", "delete"]
+    },
+    {
+      "tool_id": "agent-controller",
+      "name": "Agent Controller",
+      "description": "Manages the lifecycle and operation of other agents",
+      "permissions": ["initialize", "pause", "resume", "shutdown", "monitor"]
+    },
+    {
+      "tool_id": "workflow-engine",
+      "name": "Workflow Engine",
+      "description": "Executes and monitors predefined and dynamic workflows",
+      "permissions": ["read", "execute", "modify", "monitor"]
+    },
+    {
+      "tool_id": "system-monitor",
+      "name": "System Monitor",
+      "description": "Monitors overall system health and performance",
+      "permissions": ["read", "alert"]
+    },
+    {
+      "tool_id": "resource-allocator",
+      "name": "Resource Allocator",
+      "description": "Manages computational resources across the system",
+      "permissions": ["read", "allocate", "deallocate"]
+    }
+  ],
+  "memory": {
+    "short_term_capacity": 50,
+    "long_term_strategy": "graph-based",
+    "context_window": 8192
+  },
+  "model": {
+    "provider": "openai",
+    "name": "gpt-4",
+    "temperature": 0.2,
+    "max_tokens": 4096
+  },
+  "communication": {
+    "can_initiate": ["scout-01", "analyst-01", "creator-01", "artist-01", "optimizer-01", "publisher-01", "sentinel-01"],
+    "can_receive_from": ["scout-01", "analyst-01", "creator-01", "artist-01", "optimizer-01", "publisher-01", "sentinel-01"],
+    "message_format": "json"
+  }
+}
