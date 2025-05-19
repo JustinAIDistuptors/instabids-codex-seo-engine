@@ -23,9 +23,64 @@ This system follows a multi-agent architecture where specialized components hand
 6. **Publisher** - Deployment automation via GitHub/Vercel
 7. **Sentinel** - Performance tracking and feedback
 
+## AI Framework Architecture
+
+The project uses a sophisticated architecture for AI agent operation:
+
+### Memory Management
+- Located in `.ai/memory/`
+- Short-term memory for task context
+- Long-term memory for learned patterns
+- Semantic memory integrated with knowledge graphs
+
+### Knowledge Representation
+- Located in `.ai/knowledge/`
+- Codebase knowledge graph
+- Service taxonomy graph
+- Location knowledge graph
+- Content knowledge graph
+
+### Agent Configuration
+- Located in `.ai/configs/`
+- Individual agent configurations in JSON
+- Tool access controls
+- Memory capacity settings
+- Model parameters
+
+### Prompt Templates
+- Located in `.ai/prompts/`
+- System prompts
+- Task prompts
+- Refinement prompts
+- Meta prompts for orchestration
+
+## Codex-Specific Guidelines
+
+When building this system, leverage Codex's capabilities effectively:
+
+### Context Window Management
+- Keep files under 4000 lines to fit within Codex's 192K token context window
+- Use meaningful file and function names for better context understanding
+- Implement imports/exports to manage dependencies clearly
+
+### Parallel Task Execution
+- Design the system for Codex's ability to handle concurrent tasks
+- Use asynchronous patterns consistently
+- Structure the codebase for parallel agent operation
+
+### Pattern Recognition
+- Provide clear examples for Codex to follow
+- Use consistent patterns across similar components
+- Document pattern intentions in comments
+
+### Error Handling
+- Implement robust error handling as Codex may miss edge cases
+- Use type definitions to guide Codex's code generation
+- Add validation for critical functions
+
 ## Key Technologies
 
-- **Backend**: Node.js with Express
+- **Backend**: Node.js with Express, TypeScript
 - **Database**: PostgreSQL with Sequelize ORM
 - **Frontend**: Next.js with React
 - **AI Integration**: OpenAI API
@@ -141,3 +196,21 @@ Implement a database schema that supports:
    - Pipeline task status tracking
    - Agent activity logging
    - Error state persistence
+
+## Additional Resources
+
+- For detailed system context, refer to `project_info.txt`
+- For agent memory architecture, see `.ai/memory/README.md`
+- For knowledge representation, see `.ai/knowledge/README.md`
+- For agent configuration schema, see `.ai/configs/README.md`
+- For prompt templates, see `.ai/prompts/README.md`
+
+## Special Codex Features to Utilize
+
+1. **Natural Language Understanding**: You can process and generate rich textual content for landing pages.
+2. **Code Generation**: You can create entire modules, components, or functions from descriptions.
+3. **Pattern Completion**: You can extend existing code patterns to new use cases.
+4. **Problem Solving**: You can debug issues and propose solutions based on context.
+5. **Architecture Design**: You can help design scalable system components.
+
+Remember to break large tasks into smaller, manageable chunks that align with your context window limits. When generating new code, maintain consistency with existing patterns and follow the established architectural principles.
