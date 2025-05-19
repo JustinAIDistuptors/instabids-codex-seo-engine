@@ -1,0 +1,147 @@
+# InstaBids SEO Engine - Codex Agent Context
+
+This file provides essential project context for Codex agents working on this codebase.
+
+## Project Overview
+
+The InstaBids SEO Engine is an autonomous system designed to generate, optimize, and maintain thousands of hyper-localized service pages for InstaBids.ai. The system creates unique landing pages following the pattern of: [Service] in [City/ZIP] (e.g., "Expert Plumbers in Beverly Hills, 90210").
+
+## Technology Stack
+
+- **Backend**: Node.js with Express, TypeScript
+- **Database**: PostgreSQL with Sequelize ORM
+- **Frontend**: Next.js with React and TailwindCSS
+- **AI Integration**: OpenAI API
+- **Deployment**: GitHub API and Vercel Integration
+- **Monitoring**: Custom analytics + Google Search Console API
+
+## Architecture Patterns
+
+- **Multi-Agent System**: The codebase is organized around specialized AI agents that handle different aspects of the SEO pipeline
+- **Event-Driven Architecture**: Components communicate via events through a message bus
+- **Repository Pattern**: For database access and data persistence
+- **Factory Pattern**: For dynamic agent creation and configuration
+- **Strategy Pattern**: For implementing different content generation approaches
+- **Command Pattern**: For task execution and orchestration
+- **Observer Pattern**: For monitoring and reacting to system events
+
+## Coding Conventions
+
+### File Naming
+- Use kebab-case for filenames: `service-manager.ts` not `serviceManager.ts`
+- Use PascalCase for class filenames and React components: `ServiceManager.tsx`
+- Use kebab-case for directories: `content-generation/` not `contentGeneration/`
+
+### Code Style
+- Maximum line length: 100 characters
+- Use 2 spaces for indentation
+- Use semicolons at the end of statements
+- Use single quotes for strings, except for JSX attributes (double quotes)
+
+### TypeScript Guidelines
+- Use explicit type annotations for function parameters and return types
+- Prefer interfaces over type aliases for object types
+- Use enums for values with a fixed set of options
+- Use generic types when functions or classes can work with different types
+
+### Component Structure
+- Organize related functionality in modules
+- Keep files focused on a single responsibility
+- Extract reusable logic into utility functions or hooks
+
+### Error Handling
+- Use try/catch for asynchronous operations
+- Implement consistent error logging
+- Propagate errors with appropriate context
+- Design for graceful degradation
+
+## Key Concepts
+
+### Agent Roles
+- **Orchestrator**: Coordinates all other agents and manages workflows
+- **Scout**: Data acquisition from competitors and SERPs
+- **Analyst**: Data processing and insight extraction
+- **Creator**: Content generation for pages
+- **Artist**: Image generation with local relevance
+- **Optimizer**: SEO enhancement and schema markup
+- **Publisher**: Deployment automation via GitHub/Vercel
+- **Sentinel**: Performance tracking and feedback
+
+### Pipeline Flow
+1. Task creation (manual or automated based on opportunity analysis)
+2. Data gathering for target service+ZIP
+3. Content planning and structure generation
+4. Content creation with local relevance
+5. SEO optimization and markup
+6. Image generation
+7. Final validation
+8. Deployment
+9. Performance monitoring
+10. Automated improvement for underperforming pages
+
+## Common Challenges and Solutions
+
+### Context Management
+- Use the knowledge graph in `src/backend/services/knowledge/graph.ts`
+- Agent context is stored in `src/backend/db/models/agent-context.ts`
+- Long-term memory is implemented via embeddings in the vector database
+
+### Rate Limiting
+- All external API calls use the rate limiter service
+- Implement exponential backoff for retries
+- Monitor quota usage in the Sentinel agent
+
+### Error Recovery
+- Pipeline supports checkpoint-based recovery
+- Failed tasks are automatically retried with backoff
+- Critical failures trigger notifications via the alert service
+
+## Examples of Good Code
+
+### Agent Configuration
+```typescript
+// src/backend/config/agent-config.ts
+export const agentConfig: AgentConfig = {
+  creator: {
+    model: 'gpt-4',
+    temperature: 0.7,
+    maxTokens: 4000,
+    tools: ['search', 'templateAccess', 'demographicData'],
+    contextStrategy: 'retrievalAugmented',
+    guardrails: ['contentPolicy', 'brandGuidelines']
+  }
+};
+```
+
+### Task Processing
+```typescript
+// src/backend/services/pipeline/task-processor.ts
+async function processTask(task: Task): Promise<TaskResult> {
+  try {
+    const { taskType, parameters } = task;
+    const agent = agentFactory.createAgent(taskType);
+    const context = await contextManager.getContextForTask(task);
+    
+    const result = await agent.execute(parameters, context);
+    await eventBus.publish('task.completed', { taskId: task.id, result });
+    return result;
+  } catch (error) {
+    await errorHandler.handleTaskError(task, error);
+    throw error;
+  }
+}
+```
+
+## Optimization Guidance
+
+- Use dynamic programming for opportunity scoring algorithms
+- Implement caching for frequently accessed data
+- Batch database operations when processing multiple records
+- Use stream processing for large content generation tasks
+- Leverage worker threads for CPU-intensive operations
+
+## Documentation Links
+- Full Architecture: See `docs/ARCHITECTURE.md`
+- Agent Roles: See `docs/AGENT_ROLES.md`
+- Pipeline Process: See `docs/PIPELINE.md`
+- Admin UI: See `docs/ADMIN_UI.md`
